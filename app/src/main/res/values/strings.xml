@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Ex4</string>
+    <string name="title_activity_main_joistick">MainJoistickActivity</string>
+    <string name="title_activity_joistick_main">JoistickMainActivity</string>
+    <string name="title_activity_joistick_main2">JoistickMainActivity2</string>
+</resources>
