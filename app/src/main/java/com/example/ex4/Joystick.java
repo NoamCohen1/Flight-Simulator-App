@@ -1,16 +1,11 @@
 package com.example.ex4;
 import android.view.View;
-
-//import androidx.appcompat.app.AppCompatActivity;
-//package app.akexorcist.joystickcontroller;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 
@@ -44,7 +39,6 @@ public class Joystick {
 
     private boolean touch_state = true;
 
-
     public Joystick(Context context, ViewGroup layout, int stick_res_id) {
         mContext = context;
 
@@ -58,8 +52,6 @@ public class Joystick {
         mLayout = layout;
         params = mLayout.getLayoutParams();
     }
-
-
 
     public void startJoistick(){
         draw.position(params.width / 2, params.height / 2);
@@ -99,12 +91,6 @@ public class Joystick {
         }
     }
 
-    public float[] getPosition() {
-        if (distance > min_distance && touch_state) {
-            return new float[]{position_x, position_y};
-        }
-        return new float[]{0, 0};
-    }
     public float normal(float x){
         float i = x + 200;
         float normal = i/400;
@@ -134,25 +120,21 @@ public class Joystick {
     }
 
     public float getAngle() {
-        if (distance > min_distance && touch_state) {
-            return angle;
+        if (!(distance > min_distance && touch_state)) {
+            return 0;
         }
-        return 0;
+        return angle;
     }
 
     public float getDistance() {
-        if (distance > min_distance && touch_state) {
-            return distance;
+        if (!(distance > min_distance && touch_state)) {
+            return 0;
         }
-        return 0;
+        return distance;
     }
 
     public void setMinimumDistance(int minDistance) {
         min_distance = minDistance;
-    }
-
-    public int getMinimumDistance() {
-        return min_distance;
     }
 
     public int get8Direction() {
@@ -180,29 +162,8 @@ public class Joystick {
         return 0;
     }
 
-    public int get4Direction() {
-        if (distance > min_distance && touch_state) {
-            if (angle >= 225 && angle < 315) {
-                return STICK_UP;
-            } else if (angle >= 315 || angle < 45) {
-                return STICK_RIGHT;
-            } else if (angle >= 45 && angle < 135) {
-                return STICK_DOWN;
-            } else if (angle >= 135 && angle < 225) {
-                return STICK_LEFT;
-            }
-        } else if (distance <= min_distance && touch_state) {
-            return STICK_NONE;
-        }
-        return 0;
-    }
-
     public void setOffset(int offset) {
         OFFSET = offset;
-    }
-
-    public int getOffset() {
-        return OFFSET;
     }
 
     public void setStickAlpha(int alpha) {
@@ -210,64 +171,30 @@ public class Joystick {
         paint.setAlpha(alpha);
     }
 
-    public int getStickAlpha() {
-        return STICK_ALPHA;
-    }
-
     public void setLayoutAlpha(int alpha) {
         LAYOUT_ALPHA = alpha;
         mLayout.getBackground().setAlpha(alpha);
     }
 
-    public int getLayoutAlpha() {
-        return LAYOUT_ALPHA;
-    }
-
     public void setStickSize(int width, int height) {
         stick = Bitmap.createScaledBitmap(stick, width, height, false);
-        stick_width = stick.getWidth();
         stick_height = stick.getHeight();
-    }
-
-    public void setStickWidth(int width) {
-        stick = Bitmap.createScaledBitmap(stick, width, stick_height, false);
         stick_width = stick.getWidth();
-    }
-
-    public void setStickHeight(int height) {
-        stick = Bitmap.createScaledBitmap(stick, stick_width, height, false);
-        stick_height = stick.getHeight();
-    }
-
-    public int getStickWidth() {
-        return stick_width;
-    }
-
-    public int getStickHeight() {
-        return stick_height;
     }
 
     public void setLayoutSize(int width, int height) {
-        params.width = width;
         params.height = height;
-    }
-
-    public int getLayoutWidth() {
-        return params.width;
-    }
-
-    public int getLayoutHeight() {
-        return params.height;
+        params.width = width;
     }
 
     private double cal_angle(float x, float y) {
-        if (x >= 0 && y >= 0)
+        if (y >= 0 && x >= 0)
             return Math.toDegrees(Math.atan(y / x));
-        else if (x < 0 && y >= 0)
-            return Math.toDegrees(Math.atan(y / x)) + 180;
         else if (x < 0 && y < 0)
             return Math.toDegrees(Math.atan(y / x)) + 180;
-        else if (x >= 0 && y < 0)
+        else if (x < 0 && y >= 0)
+            return Math.toDegrees(Math.atan(y / x)) + 180;
+        else if (y < 0 && x >= 0)
             return Math.toDegrees(Math.atan(y / x)) + 360;
         return 0;
     }
@@ -292,9 +219,10 @@ public class Joystick {
         }
 
         private void position(float pos_x, float pos_y) {
-            x = pos_x - (stick_width / 2);
-            y = pos_y - (stick_height / 2);
-
+            x = pos_x;
+            x -= (stick_width / 2);
+            y = pos_y;
+            y -= (stick_height / 2);
         }
     }
 }
