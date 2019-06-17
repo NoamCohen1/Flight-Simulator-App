@@ -64,5 +64,5 @@
         android:layout_below="@+id/linearLayout1"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="29dp"
-        android:background="@drawable/grey"></RelativeLayout>
+        android:background="@drawable/image_button_bg"></RelativeLayout>
 </RelativeLayout>
